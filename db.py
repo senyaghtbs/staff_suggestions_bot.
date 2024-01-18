@@ -4,19 +4,18 @@ import sqlite3
 conn = sqlite3.connect('feedback.db', check_same_thread=False)
 cursor = conn.cursor()
 
-# таблица отзывов
+#таблица отзывов
 cursor.execute('''CREATE TABLE IF NOT EXISTS feedbacks
                (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, feedback TEXT)''')
 conn.commit()
 
 #провелка на наличия таблицы
 cursor.execute("PRAGMA table_info(feedbacks)")
-columns = [info[1] for info in cursor.fetchall()]  # Получаем список названий колонок
+columns = [info[1] for info in cursor.fetchall()]  #колонки
 if 'created_at' not in columns:
     cursor.execute('ALTER TABLE feedbacks ADD COLUMN created_at DATE')
     conn.commit()
-
-# Закрываем соединение с БД
+#закрыть бд
 cursor.close()
 conn.close()
 
@@ -41,7 +40,7 @@ def get_feedbacks():
         feedbacks = cursor.fetchall()
     return feedbacks
 
-# в database.py
+
 def save_feedback(user_id, feedback, created_at):
     with sqlite3.connect('feedback.db') as conn:
         cursor = conn.cursor()
